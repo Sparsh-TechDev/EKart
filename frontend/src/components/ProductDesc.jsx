@@ -29,7 +29,7 @@ const ProductDesc = ({ product, averageRating = 0, totalReviews = 0 }) => {
       setCartLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/cart/add",
+        `${import.meta.env.VITE_URL}/cart/add`,
         {
           productId,
           quantity,

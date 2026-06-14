@@ -28,7 +28,7 @@ const ProductCard = ({ product, loading }) => {
       setCartLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/cart/add",
+        `${import.meta.env.VITE_URL}/cart/add`,
         { productId },
         {
           headers: {
@@ -84,7 +84,7 @@ const ProductCard = ({ product, loading }) => {
 
       if (isWishlisted) {
         response = await axios.delete(
-          `http://localhost:8000/api/v1/wishlist/remove/${product._id}`,
+          `${import.meta.env.VITE_URL}/wishlist/remove/${product._id}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -93,7 +93,7 @@ const ProductCard = ({ product, loading }) => {
         );
       } else {
         response = await axios.post(
-          "http://localhost:8000/api/v1/wishlist/add",
+          `${import.meta.env.VITE_URL}/wishlist/add`,
           {
             productId: product._id,
           },

@@ -62,7 +62,7 @@ const ReviewSection = ({
       setReviewLoading(true);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/review/add",
+        `${import.meta.env.VITE_URL}/review/add`,
         {
           productId,
           rating,
@@ -110,7 +110,7 @@ const ReviewSection = ({
     try {
       setSummaryLoading(true);
       const res = await axios.get(
-        `http://localhost:8000/api/v1/review/summary/${productId}`,
+        `${import.meta.env.VITE_URL}/review/summary/${productId}`,
       );
 
       if (res.data.success) {

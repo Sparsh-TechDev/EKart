@@ -44,7 +44,7 @@ const Products = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:8000/api/v1/product/getallproducts`,
+        `${import.meta.env.VITE_URL}/product/getallproducts`,
       );
       if (response.data.success) {
         setAllProducts(response.data.products);
@@ -73,7 +73,7 @@ const Products = () => {
       setPriceRange([0, 999999]);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/ai/search",
+        `${import.meta.env.VITE_URL}/ai/search`,
         {
           query: aiPrompt,
         },

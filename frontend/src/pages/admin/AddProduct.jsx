@@ -82,7 +82,7 @@ const AddProduct = () => {
       setLoading(true);
 
       const response = await axios.post(
-        `http://localhost:8000/api/v1/product/add`,
+        `${import.meta.env.VITE_URL}/product/add`,
         formData,
         {
           headers: {
@@ -140,7 +140,7 @@ const AddProduct = () => {
       setAiLoading(true);
 
       const response = await axios.post(
-        "http://localhost:8000/api/v1/product/generate-description",
+        `${import.meta.env.VITE_URL}/product/generate-description`,
         {
           productName: productData.productName,
           brand: productData.brand,

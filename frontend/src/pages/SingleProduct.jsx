@@ -25,7 +25,7 @@ const SingleProduct = () => {
   const fetchReviews = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/v1/review/${productId}`
+        `${import.meta.env.VITE_URL}/review/${productId}`
       );
 
       if (res.data.success) {
@@ -41,7 +41,7 @@ const SingleProduct = () => {
   const fetchRecommendations = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/product/recommendations/${productId}`,
+        `${import.meta.env.VITE_URL}/product/recommendations/${productId}`,
       );
 
       if (response.data.success) {

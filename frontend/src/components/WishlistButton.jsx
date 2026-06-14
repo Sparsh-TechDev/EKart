@@ -32,7 +32,7 @@ const WishlistButton = ({ product }) => {
 
       if (isWishlisted) {
         res = await axios.delete(
-          `http://localhost:8000/api/v1/wishlist/remove/${product._id}`,
+          `${import.meta.env.VITE_URL}/wishlist/remove/${product._id}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -41,7 +41,7 @@ const WishlistButton = ({ product }) => {
         );
       } else {
         res = await axios.post(
-          "http://localhost:8000/api/v1/wishlist/add",
+          `${import.meta.env.VITE_URL}/wishlist/add`,
           {
             productId: product._id,
           },

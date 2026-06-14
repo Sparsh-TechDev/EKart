@@ -21,7 +21,7 @@ const Wishlist = () => {
   const removeFromWishlist = async (productId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8000/api/v1/wishlist/remove/${productId}`,
+        `${import.meta.env.VITE_URL}/wishlist/remove/${productId}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -42,7 +42,7 @@ const Wishlist = () => {
   const moveToCart = async (productId) => {
     try {
       const cartRes = await axios.post(
-        "http://localhost:8000/api/v1/cart/add",
+        `${import.meta.env.VITE_URL}/cart/add`,
         {
           productId,
           quantity: 1,
@@ -58,7 +58,7 @@ const Wishlist = () => {
         dispatch(setCart(cartRes.data.cart));
 
         const wishlistRes = await axios.delete(
-          `http://localhost:8000/api/v1/wishlist/remove/${productId}`,
+          `${import.meta.env.VITE_URL}/wishlist/remove/${productId}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,

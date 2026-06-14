@@ -19,7 +19,7 @@ const AdminUsers = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/user/all-user`,
+        `${import.meta.env.VITE_URL}/user/all-user`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

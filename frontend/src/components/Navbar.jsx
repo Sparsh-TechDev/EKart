@@ -53,7 +53,7 @@ const Navbar = () => {
   const logoutHandler = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:8000/api/v1/user/logout`,
+        `${import.meta.env.VITE_URL}/user/logout`,
         {},
         {
           headers: {
@@ -89,7 +89,7 @@ const Navbar = () => {
       if (!accessToken) return;
 
       const res = await axios.get(
-        "http://localhost:8000/api/v1/wishlist/my-wishlist",
+        `${import.meta.env.VITE_URL}/wishlist/my-wishlist`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,

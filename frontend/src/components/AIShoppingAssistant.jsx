@@ -42,7 +42,7 @@ I can help you with:
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:8000/api/v1/ai/assistant",
+        `${import.meta.env.VITE_URL}/ai/assistant`,
         {
           message: currentMessage,
         }

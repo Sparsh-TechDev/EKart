@@ -1,23 +1,15 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import "dotenv/config";
+
+// Initialize Resend with your API key
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const verifyEmail = async (token, email) => {
   try {
-    console.log("MAIL_USER:", process.env.MAIL_USER);
-    console.log("MAIL_PASS EXISTS:", !!process.env.MAIL_PASS);
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
-      },
-    });
-
     const verificationLink = `${process.env.FRONTEND_URL}/verify/${token}`;
 
-    const mailConfigurations = {
-      from: process.env.MAIL_USER,
+    const { data, error } = await resend.emails.send({
+      from: "E-Kart <onboarding@resend.dev>", // See note below about domains
       to: email,
       subject: "Verify Your E-Kart Account",
       html: `
@@ -54,13 +46,14 @@ export const verifyEmail = async (token, email) => {
           <p><strong>E-Kart Team</strong></p>
         </div>
       `,
-    };
+    });
 
-    const info = await transporter.sendMail(mailConfigurations);
+    if (error) {
+      console.error("❌ Resend API Error:", error);
+      throw error;
+    }
 
-    console.log("✅ Email Sent Successfully");
-    console.log(info.response);
-
+    console.log("✅ Email Sent Successfully via Resend:", data);
     return true;
   } catch (error) {
     console.error("❌ Email Sending Error:", error);

@@ -297,6 +297,7 @@ const Signup = () => {
         <CardFooter className="flex flex-col gap-4">
 
           <div className="flex items-center gap-3 w-full">
+            <div className="h-px flex-1 bg-slate-200"></div>
             <span className="text-xs text-slate-400">
               OR
             </span>

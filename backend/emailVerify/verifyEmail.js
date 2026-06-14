@@ -1,36 +1,69 @@
 import nodemailer from "nodemailer";
-
 import "dotenv/config";
 
-export const verifyEmail = (token, email) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
-    },
-  });
+export const verifyEmail = async (token, email) => {
+  try {
+    console.log("MAIL_USER:", process.env.MAIL_USER);
+    console.log("MAIL_PASS EXISTS:", !!process.env.MAIL_PASS);
 
-  const mailConfigurations = {
-    // It should be a string of sender/server email
-    from: process.env.MAIL_USER,
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
+      },
+    });
 
-    to: email,
+    const verificationLink = `${process.env.FRONTEND_URL}/verify/${token}`;
 
-    // Subject of Email
-    subject: "Email Verification",
+    const mailConfigurations = {
+      from: process.env.MAIL_USER,
+      to: email,
+      subject: "Verify Your E-Kart Account",
+      html: `
+        <div style="font-family: Arial, sans-serif; padding: 20px;">
+          <h2>Welcome to E-Kart 🎉</h2>
+          <p>Thank you for registering with E-Kart.</p>
+          <p>Please click the button below to verify your email address:</p>
 
-    // This would be the text of email body
-    text: `Hi! There, You have recently visited 
-           our website and entered your email.
-           Please follow the given link to verify your email
-           http://localhost:5173/verify/${token} 
-           Thanks`,
-  };
+          <a
+            href="${verificationLink}"
+            style="
+              display:inline-block;
+              padding:12px 24px;
+              background:#7c3aed;
+              color:white;
+              text-decoration:none;
+              border-radius:8px;
+              font-weight:bold;
+            "
+          >
+            Verify Email
+          </a>
 
-  transporter.sendMail(mailConfigurations, function (error, info) {
-    if (error) throw Error(error);
-    console.log("Email Sent Successfully");
-    console.log(info);
-  });
+          <p style="margin-top:20px;">
+            Or copy and paste this link into your browser:
+          </p>
+
+          <p>${verificationLink}</p>
+
+          <p>If you did not create this account, you can safely ignore this email.</p>
+
+          <br/>
+          <p>Regards,</p>
+          <p><strong>E-Kart Team</strong></p>
+        </div>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailConfigurations);
+
+    console.log("✅ Email Sent Successfully");
+    console.log(info.response);
+
+    return true;
+  } catch (error) {
+    console.error("❌ Email Sending Error:", error);
+    throw error;
+  }
 };

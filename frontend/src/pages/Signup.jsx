@@ -294,7 +294,7 @@ const Signup = () => {
           </form>
         </CardContent>
 
-        <CardFooter className="flex flex-col gap-4">
+        <CardFooter className="flex flex-col gap-4 border-t-0 pt-0">
 
           <div className="flex items-center gap-3 w-full">
             <div className="h-px flex-1 bg-slate-200"></div>

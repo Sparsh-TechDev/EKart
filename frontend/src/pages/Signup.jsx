@@ -120,7 +120,6 @@ const Signup = () => {
             </CardDescription>
           </div>
 
-          <div className="h-px w-full bg-slate-200"></div>
         </CardHeader>
 
         <CardContent className="pt-4">

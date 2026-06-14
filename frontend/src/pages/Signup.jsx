@@ -1,26 +1,33 @@
+```jsx
 import React, { useState } from "react";
 import axios from "axios";
 
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
+
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -30,8 +37,9 @@ const Signup = () => {
 
   const navigate = useNavigate();
 
-  const handleChange = async (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -40,125 +48,275 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
     try {
-        setLoading(true);
-        const response = await axios.post(`${import.meta.env.VITE_URL}/user/register`, formData, {
-            headers: {
-                "Content-Type":"application/json"
-            }
-        })
-        if(response.data.success) {
-            navigate('/verify');
-            toast.success(response.data.message)
+      setLoading(true);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_URL}/user/register`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        navigate("/verify");
+      }
     } catch (error) {
-        console.log(error);
-        toast.error(error.response.data.message);
+      console.log(error);
+
+      toast.error(
+        error?.response?.data?.message ||
+          "Something went wrong"
+      );
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50/30 to-violet-50/30 px-4">
-      <Card className="w-full max-w-md shadow-xl border-slate-200/60 rounded-2xl">
-        <CardHeader className="text-center pb-2">
-          <Link to="/" className="inline-block mx-auto mb-2">
-            <img src="/eKartImg.png" alt="eKart" className="w-20 mx-auto" />
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-indigo-50/30 to-violet-50/30 px-4">
+
+      {/* Background Blur Effects */}
+      <div className="absolute left-10 top-10 h-72 w-72 rounded-full bg-indigo-200/20 blur-3xl"></div>
+      <div className="absolute right-10 bottom-10 h-72 w-72 rounded-full bg-violet-200/20 blur-3xl"></div>
+
+      <Card
+        className="
+          relative
+          w-full
+          max-w-lg
+          rounded-3xl
+          border
+          border-white/40
+          bg-white/80
+          backdrop-blur-xl
+          shadow-2xl
+          shadow-slate-200/50
+        "
+      >
+        <CardHeader className="space-y-5 text-center pb-2">
+
+          <Link to="/" className="mx-auto">
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-indigo-100 to-violet-100 shadow-md">
+              <img
+                src="/eKartImg.png"
+                alt="eKart"
+                className="w-16 object-contain"
+              />
+            </div>
           </Link>
-          <CardTitle className="text-xl md:text-2xl font-bold">Create your account</CardTitle>
-          <CardDescription className="text-sm">
-            Enter your details below to get started
-          </CardDescription>
+
+          <div>
+            <CardTitle className="text-3xl font-bold tracking-tight text-slate-800">
+              Create Account
+            </CardTitle>
+
+            <CardDescription className="mt-2 text-slate-500">
+              Join eKart and start your shopping journey
+            </CardDescription>
+          </div>
+
+          <div className="h-px w-full bg-slate-200"></div>
         </CardHeader>
-        <CardContent>
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="firstName">First Name</Label>
+
+        <CardContent className="pt-4">
+          <form onSubmit={handleSubmit}>
+            <div className="space-y-5">
+
+              {/* Name Fields */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">
+                    First Name
+                  </Label>
+
                   <Input
                     id="firstName"
                     name="firstName"
                     type="text"
-                    placeholder="First name..."
+                    placeholder="John"
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="rounded-xl"
+                    className="
+                      h-12
+                      rounded-xl
+                      border-slate-200
+                      focus-visible:ring-2
+                      focus-visible:ring-indigo-500
+                    "
                   />
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="lastName">Last Name</Label>
+
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">
+                    Last Name
+                  </Label>
+
                   <Input
                     id="lastName"
                     name="lastName"
                     type="text"
-                    placeholder="Last name..."
+                    placeholder="Doe"
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="rounded-xl"
+                    className="
+                      h-12
+                      rounded-xl
+                      border-slate-200
+                      focus-visible:ring-2
+                      focus-visible:ring-indigo-500
+                    "
                   />
                 </div>
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+
+              {/* Email */}
+              <div className="space-y-2">
+                <Label htmlFor="email">
+                  Email Address
+                </Label>
+
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="john@example.com"
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="rounded-xl"
+                  className="
+                    h-12
+                    rounded-xl
+                    border-slate-200
+                    focus-visible:ring-2
+                    focus-visible:ring-indigo-500
+                  "
                 />
               </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <Label htmlFor="password">
+                  Password
+                </Label>
+
                 <div className="relative">
                   <Input
                     id="password"
                     name="password"
-                    placeholder="Create a Password"
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
+                    placeholder="Create a strong password"
                     required
                     value={formData.password}
                     onChange={handleChange}
-                    className="rounded-xl pr-12"
+                    className="
+                      h-12
+                      rounded-xl
+                      border-slate-200
+                      pr-12
+                      focus-visible:ring-2
+                      focus-visible:ring-indigo-500
+                    "
                   />
+
                   <button
                     type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-slate-100 transition-colors"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                    className="
+                      absolute
+                      right-3
+                      top-1/2
+                      -translate-y-1/2
+                      rounded-md
+                      p-1
+                      hover:bg-slate-100
+                    "
                   >
                     {showPassword ? (
-                      <EyeOff className="w-4 h-4 text-slate-500" />
+                      <EyeOff className="h-4 w-4 text-slate-500" />
                     ) : (
-                      <Eye className="w-4 h-4 text-slate-500" />
+                      <Eye className="h-4 w-4 text-slate-500" />
                     )}
                   </button>
                 </div>
+
+                <p className="text-xs text-slate-500">
+                  Use at least 8 characters for a secure password.
+                </p>
               </div>
             </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="
+                mt-6
+                h-12
+                w-full
+                rounded-xl
+                bg-gradient-to-r
+                from-indigo-600
+                to-violet-600
+                text-white
+                font-semibold
+                shadow-lg
+                shadow-indigo-200/50
+                transition-all
+                duration-300
+                hover:scale-[1.02]
+                hover:from-indigo-700
+                hover:to-violet-700
+                active:scale-[0.98]
+              "
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
+            </Button>
+          </form>
         </CardContent>
-        <CardFooter className="flex-col gap-3">
-          <Button
-            onClick={handleSubmit}
-            type="submit"
-            className="w-full cursor-pointer bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white rounded-xl py-5 font-medium shadow-md shadow-indigo-200/50"
-          >
-            {loading ? <><Loader2 className="h-4 w-4 animate-spin mr-2"/>Please wait</> : "Sign up"}
-          </Button>
-          <p className="text-slate-500 text-sm">
-            Already have an account?{" "}
+
+        <CardFooter className="flex flex-col gap-4">
+
+          <div className="flex items-center gap-3 w-full">
+            <div className="h-px flex-1 bg-slate-200"></div>
+            <span className="text-xs text-slate-400">
+              OR
+            </span>
+            <div className="h-px flex-1 bg-slate-200"></div>
+          </div>
+
+          <p className="text-sm text-slate-500">
+            Already have an account?
+
             <Link
-              to={"/login"}
-              className="text-indigo-600 font-medium hover:underline cursor-pointer"
+              to="/login"
+              className="
+                ml-1
+                font-semibold
+                text-indigo-600
+                hover:text-indigo-700
+                hover:underline
+              "
             >
               Login
             </Link>
@@ -170,3 +328,4 @@ const Signup = () => {
 };
 
 export default Signup;
+```

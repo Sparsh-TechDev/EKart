@@ -1,59 +1,46 @@
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import "dotenv/config";
 
-// Initialize Resend with your API key
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize the transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS, 
+  },
+});
 
 export const verifyEmail = async (token, email) => {
+  console.log("Sending Verification to:", email);
+
   try {
     const verificationLink = `${process.env.FRONTEND_URL}/verify/${token}`;
 
-    const { data, error } = await resend.emails.send({
-      from: "E-Kart <onboarding@resend.dev>", // See note below about domains
+    const info = await transporter.sendMail({
+      from: `"E-Kart" <${process.env.MAIL_USER}>`,
       to: email,
       subject: "Verify Your E-Kart Account",
       html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-          <h2>Welcome to E-Kart 🎉</h2>
-          <p>Thank you for registering with E-Kart.</p>
-          <p>Please click the button below to verify your email address:</p>
+        <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eaeaea; border-radius: 8px;">
+          <h2 style="color: #333;">Welcome to E-Kart 🎉</h2>
+          <p style="color: #555;">Thank you for registering. Please click the button below to verify your email address:</p>
+          
+          <div style="margin: 30px 0;">
+            <a href="${verificationLink}" style="background-color: #7c3aed; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
+              Verify Email
+            </a>
+          </div>
 
-          <a
-            href="${verificationLink}"
-            style="
-              display:inline-block;
-              padding:12px 24px;
-              background:#7c3aed;
-              color:white;
-              text-decoration:none;
-              border-radius:8px;
-              font-weight:bold;
-            "
-          >
-            Verify Email
-          </a>
-
-          <p style="margin-top:20px;">
-            Or copy and paste this link into your browser:
-          </p>
-
-          <p>${verificationLink}</p>
-
-          <p>If you did not create this account, you can safely ignore this email.</p>
-
-          <br/>
-          <p>Regards,</p>
-          <p><strong>E-Kart Team</strong></p>
+          <p style="color: #555; font-size: 14px;">Or copy and paste this link into your browser:</p>
+          <p style="color: #7c3aed; font-size: 14px; word-break: break-all;">${verificationLink}</p>
+          
+          <hr style="border: none; border-top: 1px solid #eaeaea; margin: 20px 0;" />
+          <p style="color: #888; font-size: 12px;">If you did not create this account, you can safely ignore this email.</p>
         </div>
       `,
     });
 
-    if (error) {
-      console.error("❌ Resend API Error:", error);
-      throw error;
-    }
-
-    console.log("✅ Email Sent Successfully via Resend:", data);
+    console.log("✅ Verification Email Sent Successfully:", info.messageId);
     return true;
   } catch (error) {
     console.error("❌ Email Sending Error:", error);
